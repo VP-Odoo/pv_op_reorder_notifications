@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- List view -->
+    <record id="view_op_trigger_log_tree" model="ir.ui.view">
+        <field name="name">op.reorder.trigger.log.list</field>
+        <field name="model">op.reorder.trigger.log</field>
+        <field name="arch" type="xml">
+            <list string="Reorder Trigger Logs" create="0" delete="1">
+                <field name="triggered_on"/>
+                <field name="company_id" optional="hide"/>
+                <field name="product_id"/>
+                <field name="orderpoint_id" optional="hide"/>
+                <field name="action_type"/>
+                <field name="product_qty"/>
+                <field name="product_uom_id" string="UoM"/>
+                <!-- Clickable link to RFQ/PO or MO -->
+                <field name="created_doc_ref" string="Document"/>
+                <!-- Prevent manual ticking -->
+                <field name="opened" readonly="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form view -->
+    <record id="view_op_trigger_log_form" model="ir.ui.view">
+        <field name="name">op.reorder.trigger.log.form</field>
+        <field name="model">op.reorder.trigger.log</field>
+        <field name="arch" type="xml">
+            <form string="Reorder Trigger Log">
+                <header>
+                    <button name="action_open_and_mark"
+                            type="object"
+                            string="Open Document"
+                            class="oe_highlight"
+                            invisible="['|', ('created_doc_model','=',False), ('created_doc_id','=',False)]"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="triggered_on" readonly="1"/>
+                            <field name="company_id" readonly="1"/>
+                            <field name="opened" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="product_id" readonly="1"/>
+                            <field name="orderpoint_id" readonly="1"/>
+                            <field name="action_type" readonly="1"/>
+                            <field name="product_qty" readonly="1"/>
+                            <field name="product_uom_id" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <!-- Keep model for backend logic, but hide -->
+                    <field name="created_doc_model" invisible="1"/>
+
+                    <!-- Only keep clickable reference -->
+                    <group string="Target">
+                        <field name="created_doc_ref" widget="reference" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_op_trigger_log" model="ir.actions.act_window">
+        <field name="name">Reorder Notifications</field>
+        <field name="res_model">op.reorder.trigger.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p>
+                This list shows notifications created by reorder rules (purchase/manufacturing).
+                Click the <b>Document</b> link to open the RFQ/PO or MO.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_op_trigger_log_root" name="Reorder Notifications"
+              parent="stock.menu_stock_root"
+              action="action_op_trigger_log"
+              sequence="95"/>
+</odoo>
