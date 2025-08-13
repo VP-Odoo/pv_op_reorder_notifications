@@ -1,0 +1,20 @@
+<odoo>
+  <!-- Action -->
+  <record id="action_op_trigger_log" model="ir.actions.act_window">
+    <field name="name">Reorder Notifications</field>
+    <field name="res_model">op.reorder.trigger.log</field>
+    <!-- IMPORTANT: list, not tree -->
+    <field name="view_mode">list,form</field>
+    <!-- (optional) bind default list view -->
+    <field name="view_id" ref="view_op_trigger_log_tree"/>
+    <field name="context">{}</field>
+    <field name="target">current</field>
+  </record>
+
+  <!-- Menu (if you also want it in the menu) -->
+  <menuitem id="menu_op_trigger_log"
+            name="Reorder Notifications"
+            parent="stock.menu_stock_root"
+            sequence="25"
+            action="action_op_trigger_log"/>
+</odoo>

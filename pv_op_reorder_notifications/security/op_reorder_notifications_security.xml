@@ -1,0 +1,7 @@
+<odoo>
+    <!-- Optional custom group, mainly for future toggles; not strictly required -->
+    <record id="group_op_reorder_notifications_user" model="res.groups">
+        <field name="name">Reorder Notifications User</field>
+        <field name="category_id" ref="base.module_category_inventory"/>
+    </record>
+</odoo>

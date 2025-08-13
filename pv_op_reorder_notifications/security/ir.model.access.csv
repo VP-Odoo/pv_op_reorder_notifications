@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+op_log_read_user,Read reorder log (Users),model_op_reorder_trigger_log,base.group_user,1,0,0,0
+op_log_read_stock,Read reorder log (Stock Users),model_op_reorder_trigger_log,stock.group_stock_user,1,0,0,0
+op_log_admin_full,Manage reorder log (Admins),model_op_reorder_trigger_log,base.group_system,1,1,1,1
