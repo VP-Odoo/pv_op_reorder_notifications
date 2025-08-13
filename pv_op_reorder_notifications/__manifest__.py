@@ -6,6 +6,8 @@
     "author": "PV-Odoo",
     'license': 'LGPL-3',
     'category': 'Inventory/Inventory',
+    'price': 20.00,
+    'currency': 'EUR',
     'depends': [
         'stock',
         'purchase',   # needed because we hook purchase.order.create
