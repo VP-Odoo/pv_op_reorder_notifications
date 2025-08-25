@@ -26,13 +26,11 @@ class OpReorderTriggerLog(models.Model):
     product_id = fields.Many2one('product.product', string="Product", index=True, readonly=True)
     orderpoint_id = fields.Many2one('stock.warehouse.orderpoint', string="Reorder Rule", index=True, readonly=True)
 
-    # Accept legacy & canonical keys so upstream creators won't fail
+    # Canonical keys only (avoid duplicate xmlids); legacy values normalized in create/write
     action_type = fields.Selection(
         [
             ('purchase', 'Purchase'),
-            ('Purchase', 'Purchase (legacy)'),
             ('manufacture', 'Manufacture'),
-            ('Manufacture', 'Manufacture (legacy)'),
         ],
         string="Action",
         readonly=True,
@@ -76,6 +74,34 @@ class OpReorderTriggerLog(models.Model):
                 rec.created_doc_ref = f"{rec.created_doc_model},{rec.created_doc_id}"
             else:
                 rec.created_doc_ref = False
+
+    # -------------------------------------------------------------------------
+    # Normalization for legacy values + standard CRUD hooks
+    # -------------------------------------------------------------------------
+    @staticmethod
+    def _normalize_action_type(value):
+        """Map legacy/case variants to canonical keys."""
+        if not value:
+            return value
+        mapping = {
+            'Purchase': 'purchase',
+            'Manufacture': 'manufacture',
+            'purchase': 'purchase',
+            'manufacture': 'manufacture',
+        }
+        return mapping.get(value, value)
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if 'action_type' in vals:
+                vals['action_type'] = self._normalize_action_type(vals.get('action_type'))
+        return super().create(vals_list)
+
+    def write(self, vals):
+        if 'action_type' in vals:
+            vals['action_type'] = self._normalize_action_type(vals.get('action_type'))
+        return super().write(vals)
 
     # -------------------------------------------------------------------------
     # Helpers & UI actions
