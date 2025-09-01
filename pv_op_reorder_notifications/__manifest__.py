@@ -7,7 +7,6 @@
     'license': 'LGPL-3',
     'category': 'Inventory/Inventory',
     "images": ["static/description/banner.png"],
-    'price': 20.00,
     'currency': 'EUR',
     'depends': [
         'stock',
